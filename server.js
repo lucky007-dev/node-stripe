@@ -3,21 +3,14 @@ if(process.env.NODE_ENV !== 'production'){
 }
 const stripeSecretKey=process.env.STRIPE_SECRET_KEY;
 const stripePublicKey =process.env.STRIPE_PUBLIC_KEY;
-//console.log(stripePublicKey,stripeSecretKey)
-const bodyParser =require("body-parser");
-const e = require('express');
+const express = require('express');
 const express =require("express");
 const app =express();
 const fs =require("fs");
 const stripe =require("stripe")(stripeSecretKey)
-
 app.set("view engine","ejs");
 app.use(express.json());
 app.use(express.static("public"));
-
-app.get('/', function(req, res) {
-    res.render('index');
-});
 app.get("/store",(req,res)=>{
     fs.readFile('items.json',(error,data)=>{
         if(error){
@@ -29,8 +22,6 @@ app.get("/store",(req,res)=>{
             })
         }
     })
-
-
 })
 app.post("/purchase",(req,res)=>{
     fs.readFile('items.json',(error,data)=>{
@@ -52,7 +43,6 @@ app.post("/purchase",(req,res)=>{
                 currency:'inr',
                 description: "Node Payment App Charge"
             }).then(()=>{
-                console.log('success')
                 res.json({
                     message:'Charged Successfully'
                 })
